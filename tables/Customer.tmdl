@@ -1,0 +1,41 @@
+table Customer
+	lineageTag: 15f81714-0d1e-4e87-b3e6-932be606f5e8
+
+	column CustomerID
+		dataType: string
+		lineageTag: f2b70865-3749-4a7a-8d2d-114512d52d99
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerName
+		dataType: string
+		lineageTag: 25715c14-caf6-4b39-92a3-953e1e619d61
+		summarizeBy: none
+		sourceColumn: CustomerName
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerCity
+		dataType: string
+		lineageTag: 4f7e2956-672a-45d6-b3be-1fbe51173f61
+		summarizeBy: none
+		sourceColumn: CustomerCity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		source =
+				let
+				    Source = SalesData,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"CustomerID", "CustomerName", "CustomerCity"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"CustomerID"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

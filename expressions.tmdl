@@ -1,0 +1,12 @@
+expression SalesData =
+		let
+		    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("tVjbattAEP0V4edAtHftY5qGlt4I+CGUkAfFEbaoYwXJoe3fVzOzu9hVsXejLYSVhZ09OjNzzszq/n7BytIsLhbsko9/JZfj5+uyZOPlatuummL53O4349235mfxvet/jB9vGX7/pX7Zdy/Fbd+NNzfbZrXvu127GsY7ATuWXMHH0qjFwwUCVQhUHeDw8fKueyw+dZvd0O1g124ornbrZtsMUVCAYSVsJw0vPZJFJGbzUWKIY9xKMKxEGJNGCJ74c/P7sav7J3im1aoZhq5vG09HABZTPmyMEZnEuJ2EwXjBwoz2MJxg1AEM5PG67rttcbdp9w3cbdpVve6iQoYbcgUx44pJjyMIR8bjwNc3v/ZNv6u3xXL5frxd7ru+XjcOhcOTSO4RJBV0PiaYgdJKf3E4CnFyEYHdOAaHhdRrYqIT6hh+9qF+bnfr4mNTPw3NHv7h9antHAYlpAoYJH8mEjBO1hZQqGDh0nqMamoxZ0J1EgJybjD6ykuekeRTWMAud20PkhmKr93r0PyTi0Yg6+PFSfQ8r41RaUnYSDJdeSyWrMlIUhXKRnrxc7w9crJ5isGYcewAevQAD4NlcanTQhdBCTarYBEiUJKIZdOwTioUOFOkvNUgQX7JTULZnYSQ3gRsgNAIITK6P+wv0Wm4Vyg3RCRBoSeNBr5UFsmEhFRvSUhE8mkEAFDj3YDbt2CdbZkK65f51IgSUXI3ZoHikZ4LjgP8uJ3NHGaoM6O7cBn6puATdc4xadhdSVocAMk/b6v5y54Fyf7InmdGi7wM7UXLMGMKNSmxeZZJrR/9ZXQxrxqhU5MSAyMs6F0yyzyMmwLQyFSeWoYHqRQtDuVwDlDzSwy+lDQAhrTQHKDiESIdhuGhQknPRZbTiM0vZmz44/TkMFz/T4A42V1Qf8A3lJekqZ9nTjuKQ4RQ0cjPZRpKlCwt0pHa559ONUf5j4A6OzRryLYoAwqN/vY/VFmFVRaA9JtCd3bGQFth0juzPHwHEEfobMgMMBE2MCHtJxKJCBvajFsclJ3IZm5RoyuXVAgEokj/IkGbkWQYHcmYf82g2ESjGYZzOlwo4O1gqP3bvIRQPFgJoaZpikqu6chjAMP3JTKUtqKBgOU1H0wJp64JF4elplhzp2gDxSyYN2xF8wDNN5FpiuHCSu0vDshMszT/fZC1aAPWBhg6FaR00chCMDjeVqEODo4E2SwbbaeihWA0nQnolU2e/KBcBR6ftA4q0nQsSJkNIgjBTyqsBOOPBZp8gaUwitYqjqHhfYd2zpCxecOTGkmLAzl4MZCzo6IXyEBFTeWTKT/YWJnyCtI6WUHnX0HjxDZyeHj4Aw==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [OrderID = _t, OrderDate = _t, CustomerID = _t, CustomerName = _t, CustomerCity = _t, ProductID = _t, ProductName = _t, ProductCategory = _t, Quantity = _t, UnitPrice = _t, SalesAmount = _t]),
+		    #"Changed Type" = Table.TransformColumnTypes(Source,{{"OrderID", Int64.Type}, {"OrderDate", type date}, {"CustomerID", type text}, {"CustomerName", type text}, {"CustomerCity", type text}, {"ProductID", type text}, {"ProductName", type text}, {"ProductCategory", type text}, {"Quantity", Int64.Type}, {"UnitPrice", Int64.Type}, {"SalesAmount", Int64.Type}})
+		in
+		    #"Changed Type"
+	lineageTag: 458b13f5-5179-4a62-9cd5-5d7d03afe85b
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

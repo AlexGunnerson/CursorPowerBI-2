@@ -1,0 +1,41 @@
+table Product
+	lineageTag: 723292ee-8c6c-479f-8a3a-6471883c9bd6
+
+	column ProductID
+		dataType: string
+		lineageTag: 1195fcef-d4c0-4c0b-b147-2cf9a5cbfd3d
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 35207b0b-f841-4bcf-9e19-b1972308c86c
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCategory
+		dataType: string
+		lineageTag: 6fc7c7f0-2d20-4824-801b-4091de975af6
+		summarizeBy: none
+		sourceColumn: ProductCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = SalesData,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"ProductID", "ProductName", "ProductCategory"}),
+				    #"Removed Duplicates" = Table.Distinct(#"Removed Other Columns", {"ProductID"})
+				in
+				    #"Removed Duplicates"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

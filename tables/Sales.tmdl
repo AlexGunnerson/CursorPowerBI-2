@@ -1,0 +1,82 @@
+table Sales
+	lineageTag: 262a3be9-d3ab-4b7f-bcf5-37b1b4d98cb2
+
+	column OrderID
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b505997-a9df-4fd7-b0ad-8d43871fade8
+		summarizeBy: none
+		sourceColumn: OrderID
+
+		annotation SummarizationSetBy = User
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c504345b-4a44-45e9-9898-c5b79d06f4fa
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerID
+		dataType: string
+		lineageTag: 43961a3e-a0ac-4c3c-ac0d-68d3ce5134e9
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductID
+		dataType: string
+		lineageTag: 2773d3c2-2791-419b-8da2-81f463cf3d1b
+		summarizeBy: none
+		sourceColumn: ProductID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b1e298b-842f-4e54-80b7-0b55392da05a
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		lineageTag: 5fa3eb78-9dba-4583-9f16-c6efeb3649f8
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesAmount
+		dataType: double
+		lineageTag: 598d0e00-6a0c-41f6-9cf8-05a1fd10cdca
+		summarizeBy: sum
+		sourceColumn: SalesAmount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = SalesData,
+				    #"Removed Other Columns" = Table.SelectColumns(Source,{"OrderID", "OrderDate", "CustomerID", "ProductID", "Quantity", "UnitPrice", "SalesAmount"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Removed Other Columns",{{"SalesAmount", type number}, {"UnitPrice", type number}, {"OrderDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
