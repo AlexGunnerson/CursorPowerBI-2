@@ -16,6 +16,7 @@ ref table Date
 ref table Sales
 ref table Customer
 ref table Product
+ref table _Measures
 
 ref cultureInfo en-US
 
