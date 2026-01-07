@@ -1,6 +1,8 @@
+/// Dimension table containing product catalog information. Each row represents a unique product with its name and category classification. Used for product performance analysis, category mix reporting, and inventory insights. Relates to the Sales table via ProductID to enable product-based analysis.
 table Product
 	lineageTag: 723292ee-8c6c-479f-8a3a-6471883c9bd6
 
+	/// Unique identifier for each product in the catalog. This is the primary key of the Product table and links to Sales table to connect product attributes to transactions. Used for product-level analysis and inventory tracking.
 	column ProductID
 		dataType: string
 		lineageTag: 1195fcef-d4c0-4c0b-b147-2cf9a5cbfd3d
@@ -9,6 +11,7 @@ table Product
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Display name of the product. This is the human-readable product identifier used in reports and visualizations. Use this column rather than ProductID when showing product information to end users.
 	column ProductName
 		dataType: string
 		lineageTag: 35207b0b-f841-4bcf-9e19-b1972308c86c
@@ -17,6 +20,7 @@ table Product
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Product classification or category group. Groups similar products together for category-level analysis, product mix reporting, and strategic planning. Useful for understanding which product lines drive revenue.
 	column ProductCategory
 		dataType: string
 		lineageTag: 6fc7c7f0-2d20-4824-801b-4091de975af6

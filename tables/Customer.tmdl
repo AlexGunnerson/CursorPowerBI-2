@@ -1,6 +1,8 @@
+/// Dimension table containing customer master data. Each row represents a unique customer with their identifying information and attributes. Used to analyze sales patterns by customer, identify top customers, segment by geography, and track customer behavior. Relates to the Sales table via CustomerID.
 table Customer
 	lineageTag: 15f81714-0d1e-4e87-b3e6-932be606f5e8
 
+	/// Unique identifier for each customer. This is the primary key of the Customer table and links to Sales table to connect customer attributes to transactions. Used for customer counting and segmentation.
 	column CustomerID
 		dataType: string
 		lineageTag: f2b70865-3749-4a7a-8d2d-114512d52d99
@@ -9,6 +11,7 @@ table Customer
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Full name of the customer. Used for displaying customer information in reports, identifying top customers, and creating customer-based visualizations. Should be used for user-facing reports rather than CustomerID.
 	column CustomerName
 		dataType: string
 		lineageTag: 25715c14-caf6-4b39-92a3-953e1e619d61
@@ -17,6 +20,7 @@ table Customer
 
 		annotation SummarizationSetBy = Automatic
 
+	/// City where the customer is located. Enables geographic analysis of sales, regional customer segmentation, and location-based marketing insights. Can be used to identify high-performing cities.
 	column CustomerCity
 		dataType: string
 		lineageTag: 4f7e2956-672a-45d6-b3be-1fbe51173f61

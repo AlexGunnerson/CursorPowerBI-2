@@ -1,6 +1,8 @@
+/// Dimension table providing comprehensive date attributes for time-based analysis. Contains one row per calendar day with 30 columns covering calendar periods (year/month/day), fiscal periods, week calculations, offset fields for relative filtering, and formatted date labels. Essential for all time intelligence calculations and enables period-over-period comparisons. Relates to Sales table via OrderDate.
 table Date
 	lineageTag: 95132716-21a8-4aca-bc91-d1d0656071eb
 
+	/// Primary date column containing each individual calendar day. This is the key column used to relate the Date table to fact tables. All date-based filtering and time intelligence calculations rely on this column being properly marked as a date type.
 	column Date
 		dataType: dateTime
 		formatString: Long Date
@@ -12,6 +14,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Four-digit year number (e.g., 2023, 2024). Extracted from the Date column using Date.Year function. Used for year-level aggregations, year-over-year comparisons, and filtering data by year.
 	column Year
 		dataType: int64
 		formatString: 0
@@ -21,6 +24,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// The first day of the year (January 1st) for each date. Calculated using Date.StartOfYear function. Useful for creating year-to-date calculations and identifying year boundaries in visualizations.
 	column 'Start of Year'
 		dataType: dateTime
 		formatString: Long Date
@@ -32,6 +36,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// The last day of the year (December 31st) for each date. Calculated using Date.EndOfYear function. Used for year-end analysis and determining if a date falls at year boundaries.
 	column 'End of Year'
 		dataType: dateTime
 		formatString: Long Date
@@ -43,6 +48,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Month number from 1 (January) to 12 (December). Extracted from the Date column using Date.Month function. Used for month-level aggregations and creating month-based reports. Should be combined with Year for unique identification.
 	column Month
 		dataType: int64
 		formatString: 0
@@ -52,6 +58,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// The first day of the month for each date. Calculated using Date.StartOfMonth function. Essential for month-to-date calculations and identifying month boundaries in time series analysis.
 	column 'Start of Month'
 		dataType: dateTime
 		formatString: Long Date
@@ -63,6 +70,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// The last day of the month for each date. Calculated using Date.EndOfMonth function. Used for end-of-month analysis and determining the number of days remaining in a month.
 	column 'End of Month'
 		dataType: dateTime
 		formatString: Long Date
@@ -74,6 +82,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Total number of days in the month (28-31 depending on month and leap year). Calculated using Date.DaysInMonth function. Useful for daily average calculations and understanding month length variations.
 	column 'Days in Month'
 		dataType: int64
 		formatString: 0
@@ -83,6 +92,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Day of the month number from 1 to 31. Extracted from the Date column using Date.Day function. Used for day-level filtering and creating day-of-month analysis like sales by day number.
 	column Day
 		dataType: int64
 		formatString: 0
@@ -92,6 +102,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Full name of the day of the week (Monday, Tuesday, etc.). Generated using Date.DayOfWeekName function. Used for weekday analysis, identifying patterns by day name, and creating user-friendly reports.
 	column 'Day Name'
 		dataType: string
 		lineageTag: ce1ed5c2-2d86-42aa-9baf-c2526448fbc0
@@ -100,6 +111,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Numeric day of the week where Monday=0, Tuesday=1, through Sunday=6 (based on firstDayofWeek setting). Calculated using Date.DayOfWeek function. Useful for sorting weekdays correctly and weekday-based aggregations.
 	column 'Day of Week'
 		dataType: int64
 		formatString: 0
@@ -109,6 +121,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Sequential day number within the year from 1 to 365 (or 366 in leap years). Calculated using Date.DayOfYear function. Useful for year-over-year same-day comparisons and seasonal analysis.
 	column 'Day of Year'
 		dataType: int64
 		formatString: 0
@@ -118,6 +131,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Full name of the month (January, February, etc.). Generated using Date.MonthName function. Provides user-friendly month labels for reports and should be sorted by Month number, not alphabetically.
 	column 'Month Name'
 		dataType: string
 		lineageTag: f1a03c7c-691b-4a92-9bca-4ac77495280a
@@ -126,6 +140,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Quarter number from 1 to 4 representing calendar quarters (Q1=Jan-Mar, Q2=Apr-Jun, Q3=Jul-Sep, Q4=Oct-Dec). Calculated using Date.QuarterOfYear function. Essential for quarterly reporting and quarter-over-quarter analysis.
 	column Quarter
 		dataType: int64
 		formatString: 0
@@ -135,6 +150,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// The first day of the quarter for each date. Calculated using Date.StartOfQuarter function. Used for quarter-to-date calculations and identifying quarter boundaries in reports.
 	column 'Start of Quarter'
 		dataType: dateTime
 		formatString: Long Date
@@ -146,6 +162,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// The last day of the quarter for each date. Calculated using Date.EndOfQuarter function. Useful for end-of-quarter analysis and determining quarter completion status.
 	column 'End of Quarter'
 		dataType: dateTime
 		formatString: Long Date
@@ -157,6 +174,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Week number within the year from 1 to 52/53. Calculated using Date.WeekOfYear function based on the firstDayofWeek setting. Used for weekly trending and week-over-week comparisons.
 	column 'Week of Year'
 		dataType: int64
 		formatString: 0
@@ -166,6 +184,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Week number within the month from 1 to 5. Calculated using Date.WeekOfMonth function. Helps identify which week of the month a date falls into for intra-month pattern analysis.
 	column 'Week of Month'
 		dataType: int64
 		formatString: 0
@@ -175,6 +194,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// The first day of the week (typically Monday) for each date. Calculated using Date.StartOfWeek function. Essential for week-to-date calculations and creating weekly aggregations.
 	column 'Start of Week'
 		dataType: dateTime
 		formatString: Long Date
@@ -186,6 +206,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// The last day of the week (typically Sunday) for each date. Calculated using Date.EndOfWeek function. Used for end-of-week reporting and determining if a date is at week boundaries.
 	column 'End of Week'
 		dataType: dateTime
 		formatString: Long Date
@@ -197,6 +218,7 @@ table Date
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Fiscal year number adjusted based on the fiscal year start month (configured as month 7/July). Calculated by shifting dates forward by the fiscal adjustment period before extracting the year. Used when business reporting follows a non-calendar fiscal year.
 	column 'Fiscal Year'
 		dataType: int64
 		formatString: 0
@@ -206,6 +228,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Fiscal quarter number (1-4) adjusted for the fiscal year calendar. Calculated after applying the fiscal month offset to align with company's fiscal year structure. Use this instead of calendar Quarter for fiscal reporting.
 	column 'Fiscal Quarter'
 		dataType: int64
 		formatString: 0
@@ -215,6 +238,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Fiscal month number adjusted for the fiscal year calendar. Calculated after applying the fiscal month offset to align quarters and months with the fiscal year start. Essential for fiscal period-based analysis.
 	column 'Fiscal Month'
 		dataType: int64
 		formatString: 0
@@ -224,6 +248,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Number of days between each date and today's date. Negative values are past dates (e.g., -30 = 30 days ago), positive values are future dates. Calculated as Date - Today. Useful for relative date filtering like 'Last 30 Days' or 'Next 7 Days'.
 	column 'Day Offset'
 		dataType: int64
 		formatString: 0
@@ -233,6 +258,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Number of months between each date and the current month. Negative values are past months (e.g., -3 = 3 months ago), zero is current month, positive values are future months. Calculated as (Year-CurrentYear)*12 + (Month-CurrentMonth). Essential for relative period filtering.
 	column 'Month Offset'
 		dataType: int64
 		formatString: 0
@@ -242,6 +268,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Number of years between each date and the current year. Negative values are past years (e.g., -1 = last year), zero is current year, positive values are future years. Calculated as Year - CurrentYear. Used for dynamic year filtering like 'Last Year' or 'Current Year'.
 	column 'Year Offset'
 		dataType: int64
 		formatString: 0
@@ -251,6 +278,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Number of quarters between each date and the current quarter. Negative values are past quarters (e.g., -2 = 2 quarters ago), zero is current quarter. Calculated as (Year-CurrentYear)*4 + (Quarter-CurrentQuarter). Enables relative quarter filtering like 'Last 4 Quarters'.
 	column 'Quarter Offset'
 		dataType: int64
 		formatString: 0
@@ -260,6 +288,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Human-readable year-month label formatted as 'MMM yyyy' (e.g., 'Jan 2024', 'Feb 2024'). Created using Date.ToText function. Provides user-friendly month labels that combine month name and year for reports and axes labels.
 	column Year-Month
 		dataType: string
 		lineageTag: 09428cae-a0ef-426b-90f8-3bed3a65b692
@@ -268,6 +297,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Numeric year-month code in YYYYMM format (e.g., 202401 for January 2024). Created using Date.ToText function. Useful for sorting months chronologically and creating unique month identifiers that sort correctly.
 	column 'Year-Month Code'
 		dataType: int64
 		formatString: 0
@@ -277,6 +307,7 @@ table Date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Special comparison date that shifts dates back by one year if they're older than 2 years from today. Returns the original date if within last year, adds 365 days if 1-2 years old, null if older. Used for year-over-year comparisons that align dates across years.
 	column 'Date Equalizer'
 		dataType: string
 		lineageTag: 76d9159e-d401-4d28-a496-8c95b02354f0

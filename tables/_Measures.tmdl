@@ -1,211 +1,211 @@
 /// Central hub for business intelligence - contains 45 measures across sales, customer, and product analytics with comprehensive time intelligence
 table _Measures
 
-	/// Total sales revenue from all transactions
+	/// Calculates the total revenue from all sales transactions. Uses SUM to add up all values in the SalesAmount column of the Sales table. This is the foundation metric for most revenue analysis.
 	measure 'Total Sales' = SUM(Sales[SalesAmount])
 		formatString: $#,0.00
 		displayFolder: Core Metrics
 
-	/// Total quantity of products sold
+	/// Counts the total number of product units sold across all transactions. Uses SUM to aggregate the Quantity column from the Sales table. Useful for understanding sales volume independent of price.
 	measure 'Total Quantity' = SUM(Sales[Quantity])
 		formatString: #,0
 		displayFolder: Core Metrics
 
-	/// Total number of unique orders
+	/// Counts the number of unique orders placed. Uses DISTINCTCOUNT on the OrderID column to ensure each order is counted only once, even if it contains multiple line items. Essential for calculating average order metrics.
 	measure 'Total Orders' = DISTINCTCOUNT(Sales[OrderID])
 		formatString: #,0
 		displayFolder: Core Metrics
 
-	/// Average revenue per order
+	/// Calculates the average revenue per order by dividing Total Sales by Total Orders. Uses DIVIDE function with a zero fallback to prevent division errors when there are no orders. Key metric for understanding customer purchasing behavior.
 	measure 'Average Order Value' = DIVIDE([Total Sales], [Total Orders], 0)
 		formatString: $#,0.00
 		displayFolder: Core Metrics
 
-	/// Average price per unit sold
+	/// Calculates the average price per unit sold across all transactions. Uses AVERAGE function on the UnitPrice column from the Sales table. Helps identify pricing trends and product mix effects.
 	measure 'Average Unit Price' = AVERAGE(Sales[UnitPrice])
 		formatString: $#,0.00
 		displayFolder: Core Metrics
 
-	/// Total number of unique customers who made purchases
+	/// Counts the number of unique customers who made at least one purchase. Uses DISTINCTCOUNT on the CustomerID column from the Sales table. Essential for customer segmentation and lifetime value analysis.
 	measure 'Total Customers' = DISTINCTCOUNT(Sales[CustomerID])
 		formatString: #,0
 		displayFolder: Customer Analytics
 
-	/// Average sales revenue per customer
+	/// Calculates average revenue per customer by dividing Total Sales by Total Customers. Uses DIVIDE with zero fallback to handle cases with no customers. Indicates customer lifetime value and purchasing power.
 	measure 'Sales per Customer' = DIVIDE([Total Sales], [Total Customers], 0)
 		formatString: $#,0.00
 		displayFolder: Customer Analytics
 
-	/// Average number of orders per customer
+	/// Measures purchase frequency by dividing Total Orders by Total Customers. Uses DIVIDE with zero fallback. Shows how often customers return to make purchases - higher values indicate better customer loyalty.
 	measure 'Orders per Customer' = DIVIDE([Total Orders], [Total Customers], 0)
 		formatString: #,0.0
 		displayFolder: Customer Analytics
 
-	/// Total number of unique products sold
+	/// Counts the number of distinct products that have been sold at least once. Uses DISTINCTCOUNT on ProductID from the Sales table. Useful for assessing product portfolio performance and catalog utilization.
 	measure 'Total Products Sold' = DISTINCTCOUNT(Sales[ProductID])
 		formatString: #,0
 		displayFolder: Product Performance
 
-	/// Average sales revenue per product
+	/// Calculates average revenue per product by dividing Total Sales by Total Products Sold. Uses DIVIDE with zero fallback. Helps identify if revenue is concentrated in few products or spread across many.
 	measure 'Sales per Product' = DIVIDE([Total Sales], [Total Products Sold], 0)
 		formatString: $#,0.00
 		displayFolder: Product Performance
 
-	/// Year-to-date sales
+	/// Calculates year-to-date sales from January 1st through the current date filter. Uses TOTALYTD function which automatically accumulates Total Sales from the start of the year based on the Date table. Resets each January 1st.
 	measure 'Sales YTD' = TOTALYTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Year-to-Date
 
-	/// Month-to-date sales
+	/// Calculates month-to-date sales from the 1st of the month through the current date filter. Uses TOTALMTD function which accumulates Total Sales from the month start. Resets on the 1st of each month.
 	measure 'Sales MTD' = TOTALMTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Month-to-Date
 
-	/// Quarter-to-date sales
+	/// Calculates quarter-to-date sales from the start of the quarter through the current date filter. Uses TOTALQTD function which accumulates Total Sales from the quarter start (Jan/Apr/Jul/Oct). Resets at the beginning of each quarter.
 	measure 'Sales QTD' = TOTALQTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Quarter-to-Date
 
-	/// Sales for the same period in the previous year
+	/// Shifts the current date filter back exactly one year and calculates Total Sales for that period. Uses CALCULATE with SAMEPERIODLASTYEAR to compare current performance against the same dates 12 months ago. Essential for year-over-year comparisons.
 	measure 'Sales Last Year' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Year
 
-	/// Sales for the previous month
+	/// Shifts the date filter back one month and calculates Total Sales. Uses CALCULATE with DATEADD to move the date context -1 month backward. Useful for month-over-month trend analysis and sequential comparisons.
 	measure 'Sales Last Month' = CALCULATE([Total Sales], DATEADD('Date'[Date], -1, MONTH))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Month
 
-	/// Sales for the previous quarter
+	/// Shifts the date filter back one quarter (3 months) and calculates Total Sales. Uses CALCULATE with DATEADD to move the date context -1 quarter backward. Enables quarter-over-quarter performance tracking.
 	measure 'Sales Last Quarter' = CALCULATE([Total Sales], DATEADD('Date'[Date], -1, QUARTER))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Quarter
 
-	/// Previous year year-to-date sales
+	/// Calculates year-to-date sales for the same period in the prior year. Combines TOTALYTD with SAMEPERIODLASTYEAR to get last year's YTD performance for direct comparison with current YTD. Critical for understanding year-over-year progress.
 	measure 'Sales PY YTD' = CALCULATE([Sales YTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Year
 
-	/// Previous year month-to-date sales
+	/// Calculates month-to-date sales for the same period in the prior year. Combines TOTALMTD with SAMEPERIODLASTYEAR to compare current month progress against last year's same month. Helps identify monthly performance patterns.
 	measure 'Sales PY MTD' = CALCULATE([Sales MTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Month
 
-	/// Previous year quarter-to-date sales
+	/// Calculates quarter-to-date sales for the same period in the prior year. Combines TOTALQTD with SAMEPERIODLASTYEAR to compare current quarter progress against last year's same quarter. Essential for seasonal business analysis.
 	measure 'Sales PY QTD' = CALCULATE([Sales QTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
 		displayFolder: Time Intelligence\Prior Quarter
 
-	/// Year-to-date orders
+	/// Counts total unique orders from January 1st through the current date filter. Uses TOTALYTD on the Total Orders measure to accumulate order count from year start. Helps track order volume trends throughout the year.
 	measure 'Orders YTD' = TOTALYTD([Total Orders], 'Date'[Date])
 		formatString: #,0
 		displayFolder: Time Intelligence\Year-to-Date
 
-	/// Month-to-date orders
+	/// Counts total unique orders from the 1st of the month through the current date filter. Uses TOTALMTD on Total Orders to accumulate monthly order volume. Useful for monitoring current month performance.
 	measure 'Orders MTD' = TOTALMTD([Total Orders], 'Date'[Date])
 		formatString: #,0
 		displayFolder: Time Intelligence\Month-to-Date
 
-	/// Quarter-to-date orders
+	/// Counts total unique orders from the quarter start through the current date filter. Uses TOTALQTD on Total Orders to track quarterly order volume accumulation. Important for quarterly business reviews.
 	measure 'Orders QTD' = TOTALQTD([Total Orders], 'Date'[Date])
 		formatString: #,0
 		displayFolder: Time Intelligence\Quarter-to-Date
 
-	/// Year-over-year sales growth in absolute terms
+	/// Calculates the dollar difference between current period sales and same period last year. Subtracts Sales Last Year from Total Sales to show absolute growth or decline in revenue. Positive values indicate growth, negative indicate decline.
 	measure 'Sales YoY Growth' = [Total Sales] - [Sales Last Year]
 		formatString: $#,0.00
 		displayFolder: Growth & Variance\Year-over-Year
 
-	/// Year-over-year sales growth percentage
+	/// Calculates year-over-year sales growth as a percentage. Divides the difference (Total Sales - Sales Last Year) by Sales Last Year, showing proportional change. 0.25 = 25% growth, -0.10 = 10% decline. Uses DIVIDE for safe division.
 	measure 'Sales YoY Growth %' = DIVIDE([Total Sales] - [Sales Last Year], [Sales Last Year], 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\Year-over-Year
 
-	/// Month-over-month sales growth in absolute terms
+	/// Calculates the dollar difference between current month and previous month sales. Subtracts Sales Last Month from Total Sales to show sequential month-to-month revenue change. Useful for identifying short-term trends and momentum.
 	measure 'Sales MoM Growth' = [Total Sales] - [Sales Last Month]
 		formatString: $#,0.00
 		displayFolder: Growth & Variance\Month-over-Month
 
-	/// Month-over-month sales growth percentage
+	/// Calculates month-over-month sales growth as a percentage. Divides the difference (Total Sales - Sales Last Month) by Sales Last Month to show proportional monthly change. Helps identify acceleration or deceleration in sales trends.
 	measure 'Sales MoM Growth %' = DIVIDE([Total Sales] - [Sales Last Month], [Sales Last Month], 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\Month-over-Month
 
-	/// Quarter-over-quarter sales growth in absolute terms
+	/// Calculates the dollar difference between current quarter and previous quarter sales. Subtracts Sales Last Quarter from Total Sales to show sequential quarter-to-quarter change. Important for quarterly business planning and investor reporting.
 	measure 'Sales QoQ Growth' = [Total Sales] - [Sales Last Quarter]
 		formatString: $#,0.00
 		displayFolder: Growth & Variance\Quarter-over-Quarter
 
-	/// Quarter-over-quarter sales growth percentage
+	/// Calculates quarter-over-quarter sales growth as a percentage. Divides the difference (Total Sales - Sales Last Quarter) by Sales Last Quarter to show proportional quarterly change. Key metric for quarterly business reviews.
 	measure 'Sales QoQ Growth %' = DIVIDE([Total Sales] - [Sales Last Quarter], [Sales Last Quarter], 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\Quarter-over-Quarter
 
-	/// Year-to-date sales variance vs prior year
+	/// Compares current year-to-date performance against prior year's YTD at the same point in time. Subtracts Sales PY YTD from Sales YTD to show absolute progress. Shows if you're ahead or behind last year's pace in dollar terms.
 	measure 'Sales YTD vs PY YTD' = [Sales YTD] - [Sales PY YTD]
 		formatString: $#,0.00
 		displayFolder: Growth & Variance\YTD Comparisons
 
-	/// Year-to-date sales growth percentage vs prior year
+	/// Shows year-to-date performance as a percentage compared to prior year YTD. Divides the difference (Sales YTD - Sales PY YTD) by Sales PY YTD. Answers 'Are we X% ahead or behind last year's pace?' Critical for annual planning.
 	measure 'Sales YTD vs PY YTD %' = DIVIDE([Sales YTD] - [Sales PY YTD], [Sales PY YTD], 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\YTD Comparisons
 
-	/// Month-to-date sales variance vs prior year
+	/// Compares current month-to-date performance against the same period in prior year's month. Subtracts Sales PY MTD from Sales MTD to show absolute dollar difference. Helps identify if monthly trends are improving year-over-year.
 	measure 'Sales MTD vs PY MTD' = [Sales MTD] - [Sales PY MTD]
 		formatString: $#,0.00
 		displayFolder: Growth & Variance\MTD Comparisons
 
-	/// Month-to-date sales growth percentage vs prior year
+	/// Shows month-to-date performance as a percentage compared to prior year's MTD. Divides the difference (Sales MTD - Sales PY MTD) by Sales PY MTD. Useful for forecasting final month results based on current trajectory.
 	measure 'Sales MTD vs PY MTD %' = DIVIDE([Sales MTD] - [Sales PY MTD], [Sales PY MTD], 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\MTD Comparisons
 
-	/// Year-over-year order growth percentage
+	/// Measures year-over-year change in order volume as a percentage. First calculates prior year orders using SAMEPERIODLASTYEAR, then divides the difference by prior year orders. Shows if customer transaction volume is growing or declining annually.
 	measure 'Orders YoY Growth %' =
 			VAR OrdersPY = CALCULATE([Total Orders], SAMEPERIODLASTYEAR('Date'[Date]))
 			RETURN DIVIDE([Total Orders] - OrdersPY, OrdersPY, 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\Year-over-Year
 
-	/// Year-over-year average order value growth percentage
+	/// Tracks year-over-year change in Average Order Value as a percentage. Calculates prior year AOV using SAMEPERIODLASTYEAR, then measures percentage change. Indicates if customers are spending more or less per transaction over time.
 	measure 'AOV YoY Growth %' =
 			VAR AOVPY = CALCULATE([Average Order Value], SAMEPERIODLASTYEAR('Date'[Date]))
 			RETURN DIVIDE([Average Order Value] - AOVPY, AOVPY, 0)
 		formatString: 0.0%
 		displayFolder: Growth & Variance\Year-over-Year
 
-	/// Cumulative sales from the beginning of time to current date
+	/// Calculates cumulative sales from the earliest date in the model up to the current date filter. Uses CALCULATE with FILTER on ALL dates where date <= current max date. Creates a progressive total that never decreases - each date shows all sales through that point in time.
 	measure 'Running Total Sales' = CALCULATE([Total Sales], FILTER(ALL('Date'), 'Date'[Date] <= MAX('Date'[Date])))
 		formatString: $#,0.00
 		displayFolder: Advanced Analytics\Running Totals
 
-	/// Product rank by sales volume
+	/// Ranks products by their sales performance, with 1 being the highest selling product. Uses RANKX over all product names comparing Total Sales in descending order with DENSE ranking (no gaps in rank numbers). Shows where each product stands in the sales hierarchy.
 	measure 'Sales Rank by Product' = RANKX(ALL(Product[ProductName]), [Total Sales], , DESC, DENSE)
 		formatString: #,0
 		displayFolder: Advanced Analytics\Rankings
 
-	/// Customer rank by sales volume
+	/// Ranks customers by their total purchase amount, with 1 being the top customer. Uses RANKX over all customer names comparing Total Sales in descending order with DENSE ranking. Helps identify VIP customers and segment by spending level.
 	measure 'Sales Rank by Customer' = RANKX(ALL(Customer[CustomerName]), [Total Sales], , DESC, DENSE)
 		formatString: #,0
 		displayFolder: Advanced Analytics\Rankings
 
-	/// Percentage contribution to total sales
+	/// Calculates what percentage of total company sales the current context represents. Divides Total Sales by Total Sales calculated with ALL filters removed. For example, if Product A shows 0.15, it means Product A represents 15% of all sales.
 	measure '% of Total Sales' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL()), 0)
 		formatString: 0.0%
 		displayFolder: Advanced Analytics\Percentages
 
-	/// Percentage of sales within product category
+	/// Shows what percentage of sales within a product category the current context represents. Uses ALLEXCEPT to remove all filters except ProductCategory, then divides current Total Sales by category total. Helps understand product mix within categories.
 	measure '% of Category Sales' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALLEXCEPT(Product, Product[ProductCategory])), 0)
 		formatString: 0.0%
 		displayFolder: Advanced Analytics\Percentages
 
-	/// 3-month moving average of sales
+	/// Smooths sales trends by averaging the last 3 months of data at any point in time. Uses AVERAGEX with DATESINPERIOD to get the 3-month period ending at the current date, then averages Total Sales. Reduces volatility and shows underlying trends more clearly.
 	measure 'Sales 3 Month Moving Average' = AVERAGEX(DATESINPERIOD('Date'[Date], LASTDATE('Date'[Date]), -3, MONTH), [Total Sales])
 		formatString: $#,0.00
 		displayFolder: Advanced Analytics\Moving Averages
 
-	/// Percentage of customers who made repeat purchases
+	/// Measures what percentage of prior year customers made purchases again in the current period. Identifies repeat customers by checking if they had purchases before the current period start, counts them, then divides by prior year total customers. High retention indicates strong customer loyalty.
 	measure 'Customer Retention Rate' =
 			VAR CurrentCustomers = [Total Customers]
 			VAR PYCustomers = CALCULATE([Total Customers], SAMEPERIODLASTYEAR('Date'[Date]))
@@ -230,7 +230,7 @@ table _Measures
 		formatString: 0.0%
 		displayFolder: Customer Analytics
 
-	/// Number of customers making their first purchase in the period
+	/// Counts customers making their very first purchase during the selected period. Creates a summary table of each customer's first purchase date using MIN, then counts only those whose first purchase falls within the current date filter. Critical for measuring customer acquisition.
 	measure 'New Customers' =
 			VAR FirstPurchaseDates = SUMMARIZE(Sales, Sales[CustomerID], "FirstPurchase", MIN(Sales[OrderDate]))
 			RETURN CALCULATE(
@@ -240,7 +240,7 @@ table _Measures
 		formatString: #,0
 		displayFolder: Customer Analytics
 
-	/// Number of customers who previously made purchases
+	/// Counts customers who made purchases in the current period AND had at least one purchase before the period started. Uses nested CALCULATE and FILTER to check if purchase history exists prior to the current period. Indicates successful customer retention and loyalty.
 	measure 'Repeat Customers' =
 			VAR CurrentPeriod = VALUES('Date'[Date])
 			RETURN CALCULATE(
@@ -257,13 +257,13 @@ table _Measures
 		formatString: #,0
 		displayFolder: Customer Analytics
 
-	/// Product with highest sales
+	/// Returns the name of the product with the highest Total Sales in the current context. Uses TOPN to find the single product with maximum sales from all products, then CONCATENATEX to display the product name as text. Useful for KPI cards and summary dashboards.
 	measure 'Best Selling Product' =
 			VAR TopProduct = TOPN(1, ALL(Product[ProductName]), [Total Sales], DESC)
 			RETURN CONCATENATEX(TopProduct, Product[ProductName], ", ")
 		displayFolder: Product Performance
 
-	/// Customer with highest sales
+	/// Returns the name of the customer with the highest Total Sales in the current context. Uses TOPN to identify the customer with maximum spending from all customers, then CONCATENATEX to display the customer name as text. Highlights your most valuable customer in any filtered context.
 	measure 'Top Customer' =
 			VAR TopCust = TOPN(1, ALL(Customer[CustomerName]), [Total Sales], DESC)
 			RETURN CONCATENATEX(TopCust, Customer[CustomerName], ", ")

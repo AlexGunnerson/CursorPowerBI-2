@@ -1,6 +1,8 @@
+/// Fact table containing all sales transactions. Each row represents a single order line item with details about what was sold, when, to whom, quantity, price, and total amount. This is the primary table for revenue analysis and is the foundation of most business metrics. Links to Customer, Product, and Date dimension tables.
 table Sales
 	lineageTag: 262a3be9-d3ab-4b7f-bcf5-37b1b4d98cb2
 
+	/// Unique identifier for each sales order. This is the primary key that distinguishes one order from another. Used to count distinct orders and link order details together.
 	column OrderID
 		dataType: int64
 		formatString: 0
@@ -10,6 +12,7 @@ table Sales
 
 		annotation SummarizationSetBy = User
 
+	/// The date when the order was placed by the customer. This is the key date field used for all time-based analysis, filtering, and time intelligence calculations. Links to the Date table for calendar features.
 	column OrderDate
 		dataType: dateTime
 		formatString: Long Date
@@ -21,6 +24,7 @@ table Sales
 
 		annotation UnderlyingDateTimeDataType = Date
 
+	/// Foreign key linking to the Customer table. Identifies which customer placed this order. Used to aggregate sales by customer and analyze customer behavior patterns.
 	column CustomerID
 		dataType: string
 		lineageTag: 43961a3e-a0ac-4c3c-ac0d-68d3ce5134e9
@@ -29,6 +33,7 @@ table Sales
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Foreign key linking to the Product table. Identifies which product was sold in this transaction. Used to analyze product performance and sales mix.
 	column ProductID
 		dataType: string
 		lineageTag: 2773d3c2-2791-419b-8da2-81f463cf3d1b
@@ -37,6 +42,7 @@ table Sales
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Number of units of the product sold in this transaction. Always a whole number representing item count. Used to calculate total units sold and average quantities per order.
 	column Quantity
 		dataType: int64
 		formatString: 0
@@ -46,6 +52,7 @@ table Sales
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Price per single unit of the product at the time of sale. Represents the actual selling price which may differ from list price due to discounts or promotions. Used to calculate revenue and analyze pricing trends.
 	column UnitPrice
 		dataType: double
 		lineageTag: 5fa3eb78-9dba-4583-9f16-c6efeb3649f8
@@ -56,6 +63,7 @@ table Sales
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	/// Total revenue for this transaction line, calculated as Quantity × UnitPrice. This is the primary revenue metric summed across all measures. Represents the actual dollars received from the sale.
 	column SalesAmount
 		dataType: double
 		lineageTag: 598d0e00-6a0c-41f6-9cf8-05a1fd10cdca
