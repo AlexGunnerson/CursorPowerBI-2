@@ -4,206 +4,206 @@ table _Measures
 	/// Total sales revenue from all transactions
 	measure 'Total Sales' = SUM(Sales[SalesAmount])
 		formatString: $#,0.00
-		displayFolder: 📊 Core Metrics
+		displayFolder: Core Metrics
 
 	/// Total quantity of products sold
 	measure 'Total Quantity' = SUM(Sales[Quantity])
 		formatString: #,0
-		displayFolder: 📊 Core Metrics
+		displayFolder: Core Metrics
 
 	/// Total number of unique orders
 	measure 'Total Orders' = DISTINCTCOUNT(Sales[OrderID])
 		formatString: #,0
-		displayFolder: 📊 Core Metrics
+		displayFolder: Core Metrics
 
 	/// Average revenue per order
 	measure 'Average Order Value' = DIVIDE([Total Sales], [Total Orders], 0)
 		formatString: $#,0.00
-		displayFolder: 📊 Core Metrics
+		displayFolder: Core Metrics
 
 	/// Average price per unit sold
 	measure 'Average Unit Price' = AVERAGE(Sales[UnitPrice])
 		formatString: $#,0.00
-		displayFolder: 📊 Core Metrics
+		displayFolder: Core Metrics
 
 	/// Total number of unique customers who made purchases
 	measure 'Total Customers' = DISTINCTCOUNT(Sales[CustomerID])
 		formatString: #,0
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Average sales revenue per customer
 	measure 'Sales per Customer' = DIVIDE([Total Sales], [Total Customers], 0)
 		formatString: $#,0.00
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Average number of orders per customer
 	measure 'Orders per Customer' = DIVIDE([Total Orders], [Total Customers], 0)
 		formatString: #,0.0
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Total number of unique products sold
 	measure 'Total Products Sold' = DISTINCTCOUNT(Sales[ProductID])
 		formatString: #,0
-		displayFolder: 🛍️ Product Performance
+		displayFolder: Product Performance
 
 	/// Average sales revenue per product
 	measure 'Sales per Product' = DIVIDE([Total Sales], [Total Products Sold], 0)
 		formatString: $#,0.00
-		displayFolder: 🛍️ Product Performance
+		displayFolder: Product Performance
 
 	/// Year-to-date sales
 	measure 'Sales YTD' = TOTALYTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Year-to-Date
+		displayFolder: Time Intelligence\Year-to-Date
 
 	/// Month-to-date sales
 	measure 'Sales MTD' = TOTALMTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Month-to-Date
+		displayFolder: Time Intelligence\Month-to-Date
 
 	/// Quarter-to-date sales
 	measure 'Sales QTD' = TOTALQTD([Total Sales], 'Date'[Date])
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Quarter-to-Date
+		displayFolder: Time Intelligence\Quarter-to-Date
 
 	/// Sales for the same period in the previous year
 	measure 'Sales Last Year' = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Year
+		displayFolder: Time Intelligence\Prior Year
 
 	/// Sales for the previous month
 	measure 'Sales Last Month' = CALCULATE([Total Sales], DATEADD('Date'[Date], -1, MONTH))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Month
+		displayFolder: Time Intelligence\Prior Month
 
 	/// Sales for the previous quarter
 	measure 'Sales Last Quarter' = CALCULATE([Total Sales], DATEADD('Date'[Date], -1, QUARTER))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Quarter
+		displayFolder: Time Intelligence\Prior Quarter
 
 	/// Previous year year-to-date sales
 	measure 'Sales PY YTD' = CALCULATE([Sales YTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Year
+		displayFolder: Time Intelligence\Prior Year
 
 	/// Previous year month-to-date sales
 	measure 'Sales PY MTD' = CALCULATE([Sales MTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Month
+		displayFolder: Time Intelligence\Prior Month
 
 	/// Previous year quarter-to-date sales
 	measure 'Sales PY QTD' = CALCULATE([Sales QTD], SAMEPERIODLASTYEAR('Date'[Date]))
 		formatString: $#,0.00
-		displayFolder: 📅 Time Intelligence\Prior Quarter
+		displayFolder: Time Intelligence\Prior Quarter
 
 	/// Year-to-date orders
 	measure 'Orders YTD' = TOTALYTD([Total Orders], 'Date'[Date])
 		formatString: #,0
-		displayFolder: 📅 Time Intelligence\Year-to-Date
+		displayFolder: Time Intelligence\Year-to-Date
 
 	/// Month-to-date orders
 	measure 'Orders MTD' = TOTALMTD([Total Orders], 'Date'[Date])
 		formatString: #,0
-		displayFolder: 📅 Time Intelligence\Month-to-Date
+		displayFolder: Time Intelligence\Month-to-Date
 
 	/// Quarter-to-date orders
 	measure 'Orders QTD' = TOTALQTD([Total Orders], 'Date'[Date])
 		formatString: #,0
-		displayFolder: 📅 Time Intelligence\Quarter-to-Date
+		displayFolder: Time Intelligence\Quarter-to-Date
 
 	/// Year-over-year sales growth in absolute terms
 	measure 'Sales YoY Growth' = [Total Sales] - [Sales Last Year]
 		formatString: $#,0.00
-		displayFolder: 📈 Growth & Variance\Year-over-Year
+		displayFolder: Growth & Variance\Year-over-Year
 
 	/// Year-over-year sales growth percentage
 	measure 'Sales YoY Growth %' = DIVIDE([Total Sales] - [Sales Last Year], [Sales Last Year], 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\Year-over-Year
+		displayFolder: Growth & Variance\Year-over-Year
 
 	/// Month-over-month sales growth in absolute terms
 	measure 'Sales MoM Growth' = [Total Sales] - [Sales Last Month]
 		formatString: $#,0.00
-		displayFolder: 📈 Growth & Variance\Month-over-Month
+		displayFolder: Growth & Variance\Month-over-Month
 
 	/// Month-over-month sales growth percentage
 	measure 'Sales MoM Growth %' = DIVIDE([Total Sales] - [Sales Last Month], [Sales Last Month], 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\Month-over-Month
+		displayFolder: Growth & Variance\Month-over-Month
 
 	/// Quarter-over-quarter sales growth in absolute terms
 	measure 'Sales QoQ Growth' = [Total Sales] - [Sales Last Quarter]
 		formatString: $#,0.00
-		displayFolder: 📈 Growth & Variance\Quarter-over-Quarter
+		displayFolder: Growth & Variance\Quarter-over-Quarter
 
 	/// Quarter-over-quarter sales growth percentage
 	measure 'Sales QoQ Growth %' = DIVIDE([Total Sales] - [Sales Last Quarter], [Sales Last Quarter], 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\Quarter-over-Quarter
+		displayFolder: Growth & Variance\Quarter-over-Quarter
 
 	/// Year-to-date sales variance vs prior year
 	measure 'Sales YTD vs PY YTD' = [Sales YTD] - [Sales PY YTD]
 		formatString: $#,0.00
-		displayFolder: 📈 Growth & Variance\YTD Comparisons
+		displayFolder: Growth & Variance\YTD Comparisons
 
 	/// Year-to-date sales growth percentage vs prior year
 	measure 'Sales YTD vs PY YTD %' = DIVIDE([Sales YTD] - [Sales PY YTD], [Sales PY YTD], 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\YTD Comparisons
+		displayFolder: Growth & Variance\YTD Comparisons
 
 	/// Month-to-date sales variance vs prior year
 	measure 'Sales MTD vs PY MTD' = [Sales MTD] - [Sales PY MTD]
 		formatString: $#,0.00
-		displayFolder: 📈 Growth & Variance\MTD Comparisons
+		displayFolder: Growth & Variance\MTD Comparisons
 
 	/// Month-to-date sales growth percentage vs prior year
 	measure 'Sales MTD vs PY MTD %' = DIVIDE([Sales MTD] - [Sales PY MTD], [Sales PY MTD], 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\MTD Comparisons
+		displayFolder: Growth & Variance\MTD Comparisons
 
 	/// Year-over-year order growth percentage
 	measure 'Orders YoY Growth %' =
 			VAR OrdersPY = CALCULATE([Total Orders], SAMEPERIODLASTYEAR('Date'[Date]))
 			RETURN DIVIDE([Total Orders] - OrdersPY, OrdersPY, 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\Year-over-Year
+		displayFolder: Growth & Variance\Year-over-Year
 
 	/// Year-over-year average order value growth percentage
 	measure 'AOV YoY Growth %' =
 			VAR AOVPY = CALCULATE([Average Order Value], SAMEPERIODLASTYEAR('Date'[Date]))
 			RETURN DIVIDE([Average Order Value] - AOVPY, AOVPY, 0)
 		formatString: 0.0%
-		displayFolder: 📈 Growth & Variance\Year-over-Year
+		displayFolder: Growth & Variance\Year-over-Year
 
 	/// Cumulative sales from the beginning of time to current date
 	measure 'Running Total Sales' = CALCULATE([Total Sales], FILTER(ALL('Date'), 'Date'[Date] <= MAX('Date'[Date])))
 		formatString: $#,0.00
-		displayFolder: 📈 Advanced Analytics\Running Totals
+		displayFolder: Advanced Analytics\Running Totals
 
 	/// Product rank by sales volume
 	measure 'Sales Rank by Product' = RANKX(ALL(Product[ProductName]), [Total Sales], , DESC, DENSE)
 		formatString: #,0
-		displayFolder: 📈 Advanced Analytics\Rankings
+		displayFolder: Advanced Analytics\Rankings
 
 	/// Customer rank by sales volume
 	measure 'Sales Rank by Customer' = RANKX(ALL(Customer[CustomerName]), [Total Sales], , DESC, DENSE)
 		formatString: #,0
-		displayFolder: 📈 Advanced Analytics\Rankings
+		displayFolder: Advanced Analytics\Rankings
 
 	/// Percentage contribution to total sales
 	measure '% of Total Sales' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALL()), 0)
 		formatString: 0.0%
-		displayFolder: 📈 Advanced Analytics\Percentages
+		displayFolder: Advanced Analytics\Percentages
 
 	/// Percentage of sales within product category
 	measure '% of Category Sales' = DIVIDE([Total Sales], CALCULATE([Total Sales], ALLEXCEPT(Product, Product[ProductCategory])), 0)
 		formatString: 0.0%
-		displayFolder: 📈 Advanced Analytics\Percentages
+		displayFolder: Advanced Analytics\Percentages
 
 	/// 3-month moving average of sales
 	measure 'Sales 3 Month Moving Average' = AVERAGEX(DATESINPERIOD('Date'[Date], LASTDATE('Date'[Date]), -3, MONTH), [Total Sales])
 		formatString: $#,0.00
-		displayFolder: 📈 Advanced Analytics\Moving Averages
+		displayFolder: Advanced Analytics\Moving Averages
 
 	/// Percentage of customers who made repeat purchases
 	measure 'Customer Retention Rate' =
@@ -228,7 +228,7 @@ table _Measures
 			)
 			RETURN DIVIDE(RepeatCustomers, PYCustomers, 0)
 		formatString: 0.0%
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Number of customers making their first purchase in the period
 	measure 'New Customers' =
@@ -238,7 +238,7 @@ table _Measures
 			    FILTER(FirstPurchaseDates, [FirstPurchase] >= MIN('Date'[Date]) && [FirstPurchase] <= MAX('Date'[Date]))
 			)
 		formatString: #,0
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Number of customers who previously made purchases
 	measure 'Repeat Customers' =
@@ -255,19 +255,19 @@ table _Measures
 			    )
 			)
 		formatString: #,0
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	/// Product with highest sales
 	measure 'Best Selling Product' =
 			VAR TopProduct = TOPN(1, ALL(Product[ProductName]), [Total Sales], DESC)
 			RETURN CONCATENATEX(TopProduct, Product[ProductName], ", ")
-		displayFolder: 🛍️ Product Performance
+		displayFolder: Product Performance
 
 	/// Customer with highest sales
 	measure 'Top Customer' =
 			VAR TopCust = TOPN(1, ALL(Customer[CustomerName]), [Total Sales], DESC)
 			RETURN CONCATENATEX(TopCust, Customer[CustomerName], ", ")
-		displayFolder: 👥 Customer Analytics
+		displayFolder: Customer Analytics
 
 	partition _Measures = calculated
 		mode: import
